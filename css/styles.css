@@ -419,6 +419,9 @@ kbd { font-family: var(--mono); font-size: 13px; padding: 2px 7px; border-radius
 .footer { background: #0B0D11; color: #C8CCD3; padding: 40px 0; border-top: 1px solid #1D2129; }
 .footer__inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
 .footer .logo { color: #fff; }
+.footer__ig { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 600; color: #fff; padding: 8px 14px; border-radius: 999px; border: 1px solid #2A2F39; transition: border-color .2s, color .2s; }
+.footer__ig:hover { border-color: var(--red); color: #FF3B52; }
+.footer__ig svg { width: 20px; height: 20px; }
 .footer__small { font-family: var(--mono); font-size: 12px; color: var(--muted-dark); }
 
 /* ---------- CARRITO (botón) ---------- */
