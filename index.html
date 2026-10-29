@@ -18,21 +18,25 @@
   <!-- NAV + MARCADOR -->
   <header class="nav" id="nav">
     <a href="#inicio" class="logo" aria-label="Set Point, inicio">
-      <span class="logo__ball" aria-hidden="true"></span>
+      <img class="logo__img" src="assets/img/logo.png" alt="" width="40" height="39">
       <span class="logo__text">SET<b>POINT</b></span>
     </a>
     <nav class="nav__links" id="navLinks" aria-label="Principal">
-      <a href="#propuesta">Propuesta</a>
-      <a href="#clientes">Para ti</a>
+      <a href="#tienda">Tienda</a>
       <a href="#asesor">Asesor</a>
-      <a href="#tienda">La tienda</a>
+      <a href="#propuesta">Propuesta</a>
+      <a href="#blog">Blog</a>
       <a href="#comunidad">Comunidad</a>
-      <a href="#proyecto">Proyecto</a>
+      <a href="#contacto">Contacto</a>
     </nav>
     <div class="scoreboard" aria-live="polite" title="Tu marcador: suma un punto por cada sección que visitas">
       <span class="scoreboard__label">SET 1</span>
       <span class="scoreboard__digits"><span id="scoreYou">00</span><i>:</i><span id="scoreRival">00</span></span>
     </div>
+    <button class="cartbtn" id="cartBtn" aria-controls="cart" aria-expanded="false" aria-label="Abrir carrito (0 productos)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 10V7a3 3 0 0 1 6 0v3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      <span class="cartbtn__count" id="cartCount">0</span>
+    </button>
     <button class="nav__burger" id="burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
   </header>
   <div class="setpoint-toast" id="setpointToast" role="status">¡SET POINT!</div>
@@ -43,15 +47,15 @@
     <section class="hero" id="inicio" data-score>
       <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
       <div class="hero__inner">
-        <p class="eyebrow"><span class="dot"></span> Tienda física + online · Andalucía occidental</p>
+        <p class="eyebrow"><span class="dot"></span> Tienda física + online · Carmona (Sevilla)</p>
         <h1 class="hero__title">
           <span class="line">Somos Set Point,</span>
           <span class="line line--accent">somos tenis de mesa.</span>
         </h1>
         <p class="hero__lead">La tienda especializada que acerca el tenis de mesa a jugadores y clubes de Andalucía occidental, con <strong>asesoramiento personalizado y gratuito</strong> y <strong>envíos en menos de 24&nbsp;h</strong>.</p>
         <div class="hero__cta">
-          <a href="#asesor" class="btn btn--primary">Encuentra tu material <span aria-hidden="true">→</span></a>
-          <a href="#juego" class="btn btn--ghost">Juega un set rápido</a>
+          <a href="#tienda" class="btn btn--primary">Comprar ahora <span aria-hidden="true">→</span></a>
+          <a href="#asesor" class="btn btn--ghost">Encuentra tu material</a>
         </div>
       </div>
       <ul class="hero__chips" aria-label="Lo esencial">
@@ -243,7 +247,7 @@
             </div>
           </form>
         </div>
-        <p class="source reveal">Es una orientación general. En Set Point te hacemos una recomendación personalizada y gratuita, en tienda o por WhatsApp.</p>
+        <p class="source reveal">Es una orientación general. En Set Point te hacemos una recomendación personalizada y gratuita, en tienda, por teléfono o por e-mail.</p>
       </div>
     </section>
 
@@ -252,27 +256,36 @@
       <div class="container">
         <div class="section__head reveal">
           <p class="kicker">05 · La tienda</p>
-          <h2>Una tienda donde<br><span class="muted">se juega.</span></h2>
-          <p class="section__intro">Tienda física y online especializada solo en tenis de mesa, con material para todos los niveles y estilos de juego. En el centro tendremos una mesa de competición para probar el material antes de comprarlo.</p>
+          <h2>Tu tienda especialista<br><span class="muted">en tenis de mesa.</span></h2>
+          <p class="section__intro">¡Bienvenido a Set Point! Te ofrecemos el mejor equipamiento para impulsar tu juego: maderas, gomas, camisetas y calzado.</p>
         </div>
-        <div class="catalog">
-          <article class="product reveal" data-tilt>
-            <div class="product__art product__art--rubber" aria-hidden="true"><span></span><span></span></div>
-            <h3>Gomas</h3><p>Control, efecto y velocidad para cada estilo.</p>
-          </article>
-          <article class="product reveal" data-tilt>
-            <div class="product__art product__art--blade" aria-hidden="true"><span></span></div>
-            <h3>Maderas</h3><p>De defensivas a ofensivas, de iniciación a competición.</p>
-          </article>
-          <article class="product reveal" data-tilt>
-            <div class="product__art product__art--shoe" aria-hidden="true"><span></span></div>
-            <h3>Calzado</h3><p>Agarre y estabilidad para moverte rápido junto a la mesa.</p>
-          </article>
-          <article class="product reveal" data-tilt>
-            <div class="product__art product__art--shirt" aria-hidden="true"><span></span></div>
-            <h3>Textil</h3><p>Equipaciones para jugadores y clubes, con opción de personalizarlas.</p>
-          </article>
+
+        <div class="shop reveal">
+          <div class="shop__filters" role="group" aria-label="Filtrar por categoría">
+            <button class="chip" data-cat="todo" aria-pressed="true">Todo <span>12</span></button>
+            <button class="chip" data-cat="gomas" aria-pressed="false">Gomas <span>3</span></button>
+            <button class="chip" data-cat="maderas" aria-pressed="false">Maderas <span>3</span></button>
+            <button class="chip" data-cat="textil" aria-pressed="false">Textil <span>3</span></button>
+            <button class="chip" data-cat="calzado" aria-pressed="false">Calzado <span>3</span></button>
+          </div>
+
+          <div class="shop__banner" id="shopBanner">
+            <img id="shopBannerImg" src="assets/img/hero-home.jpg" alt="" loading="lazy">
+            <div class="shop__bannertext">
+              <h3 id="shopBannerTitle">Tu tienda especialista en tenis de mesa</h3>
+              <p id="shopBannerText">Contamos con una amplia gama de maderas, gomas, camisetas y calzado. Nuestro objetivo es llevar tu juego al siguiente nivel.</p>
+            </div>
+          </div>
+
+          <div class="shop__grid" id="shopGrid" aria-live="polite"></div>
+
+          <ul class="perks">
+            <li><b>Envío gratis</b> a domicilio en compras superiores a 50&nbsp;€</li>
+            <li><b>Envío en &lt;24&nbsp;h</b> para que no esperes tu material</li>
+            <li><b>Asesoramiento gratuito</b> antes y después de comprar</li>
+          </ul>
         </div>
+
         <ul class="services">
           <li class="reveal"><span>🏓</span><div><b>Mesa de competición</b>Prueba el material en la mesa central de la tienda.</div></li>
           <li class="reveal"><span>✎</span><div><b>Personalización</b>Personalizamos algunos productos para jugadores y clubes.</div></li>
@@ -282,11 +295,112 @@
       </div>
     </section>
 
+    <!-- PROMO SELECCIÓN -->
+    <section class="promo" id="seleccion" data-score>
+      <img class="promo__img" src="assets/img/banner-seleccion.jpg" alt="Jugadora de la selección española con la equipación roja durante un partido" loading="lazy">
+      <div class="container promo__inner reveal">
+        <p class="kicker kicker--light">Novedad</p>
+        <h2>¡Ya disponible la equipación de la selección española!</h2>
+        <p>Hazte con la tuya y siéntete orgulloso de lucir los colores del equipo nacional.</p>
+        <a href="#tienda" class="btn btn--primary" data-goto-cat="textil">Comprar ahora <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section class="section section--light" id="blog" data-score>
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="kicker">06 · Blog</p>
+          <h2>Consejos para<br><span class="muted">jugar mejor.</span></h2>
+        </div>
+        <div class="posts">
+          <article class="post reveal">
+            <button class="post__open" data-post="post-pala" aria-haspopup="dialog">
+              <span class="post__media"><img src="assets/img/blog-pala.jpg" alt="Jugador con camiseta azul golpeando la bola sobre la mesa" loading="lazy"></span>
+              <span class="post__meta"><span class="post__cat">Material</span> · 17 de marzo de 2025</span>
+              <span class="post__title">Cómo elegir la pala de tenis de mesa perfecta para tu nivel de juego</span>
+              <span class="post__excerpt">Elegir la pala adecuada puede marcar la diferencia en tu rendimiento y disfrute del juego. Te ayudamos a encontrarla según tu nivel y estilo.</span>
+              <span class="post__more">Leer artículo <span aria-hidden="true">→</span></span>
+            </button>
+          </article>
+          <article class="post reveal">
+            <button class="post__open" data-post="post-saque" aria-haspopup="dialog">
+              <span class="post__media"><img src="assets/img/blog-saque.jpg" alt="Jugadora sacando en un partido de competición" loading="lazy"></span>
+              <span class="post__meta"><span class="post__cat">Consejos</span> · 17 de marzo de 2025</span>
+              <span class="post__title">¿Cómo mejorar el saque?</span>
+              <span class="post__excerpt">Un buen saque puede darte ventaja desde el inicio del punto y poner en apuros a tu rival. Te damos algunos consejos para hacerlo más efectivo.</span>
+              <span class="post__more">Leer artículo <span aria-hidden="true">→</span></span>
+            </button>
+          </article>
+        </div>
+      </div>
+
+      <template id="post-pala">
+        <img class="article__cover" src="assets/img/blog-pala.jpg" alt="Jugador con camiseta azul golpeando la bola sobre la mesa">
+        <p class="article__meta">Material · José Manuel Cabezas Flores · 17 de marzo de 2025</p>
+        <h2>Cómo elegir la pala de tenis de mesa perfecta para tu nivel de juego</h2>
+        <p>En Set Point sabemos que elegir la pala de tenis de mesa adecuada puede marcar la diferencia en tu rendimiento y disfrute del juego. Ya seas principiante, aficionado o jugador avanzado, contar con el equipo adecuado es clave. En esta guía te ayudamos a encontrar la pala perfecta según tu nivel y estilo de juego.</p>
+        <h3>1. Principiantes: control y comodidad</h3>
+        <p>Si estás empezando, lo más importante es desarrollar la técnica y el control de la pelota. Busca una pala con:</p>
+        <ul>
+          <li>Gomas con esponja fina (1,5&nbsp;mm o menos) para mayor control.</li>
+          <li>Madera con buen equilibrio entre velocidad y control.</li>
+          <li>Mango anatómico o cóncavo, que ofrece comodidad y mejor agarre.</li>
+        </ul>
+        <img src="assets/img/blog-pala-2.jpg" alt="Niño jugando en un Campeonato de España de tenis de mesa" loading="lazy">
+        <h3>2. Intermedios: más efecto y potencia</h3>
+        <p>Cuando ya tienes experiencia, puedes empezar a jugar con más velocidad y efectos. Para ello, elige una pala con:</p>
+        <ul>
+          <li>Gomas de esponja media (1,7–2,0&nbsp;mm) para un buen equilibrio entre efecto y velocidad.</li>
+          <li>Madera más rígida o con carbono, para aumentar la potencia en los golpes.</li>
+          <li>Gomas con mayor dureza, como la <button class="article__product" data-add="goma-rozena">Butterfly Rozena</button>, que potencian los efectos sin perder control.</li>
+        </ul>
+        <h3>3. Avanzados: velocidad y precisión máxima</h3>
+        <p>Si ya compites o tienes un nivel avanzado, necesitas una pala que se adapte a tu estilo de juego. Considera:</p>
+        <ul>
+          <li>Gomas con esponja gruesa (2,1–2,2&nbsp;mm) para ataques rápidos y potentes.</li>
+          <li>Madera con carbono o ZLC (Zylon-Carbon) para mayor rigidez y respuesta rápida.</li>
+          <li>Gomas especializadas según tu juego: más blandas si priorizas el efecto y más duras si priorizas la velocidad.</li>
+        </ul>
+        <p>Si dudas sobre qué material necesitas, no te lo pienses dos veces y contacta con nuestro equipo. Te asesoraremos para que encuentres la pala o el calzado que mejor se adapte a ti.</p>
+        <p class="article__tags">avanzados · gomas · intermedios · maderas · principiantes · tenis de mesa</p>
+      </template>
+
+      <template id="post-saque">
+        <img class="article__cover" src="assets/img/blog-saque.jpg" alt="Jugadora sacando en un partido de competición">
+        <p class="article__meta">Consejos · José Manuel Cabezas Flores · 17 de marzo de 2025</p>
+        <h2>¿Cómo mejorar el saque?</h2>
+        <p>El saque es uno de los golpes más importantes en el tenis de mesa. Un buen saque puede darte ventaja desde el inicio del punto y poner en apuros a tu rival. En Set Point te damos algunos consejos para mejorar tu saque y hacerlo más efectivo:</p>
+        <h3>1. Varía el efecto</h3>
+        <ul>
+          <li>Prueba diferentes efectos: topspin (liftado), backspin (cortado) y sidespin (lateral). La efectividad de los efectos también puede verse afectada por la madera que utilices, por lo que es recomendable usar una que se adapte a ti.</li>
+          <li>Observa cómo reacciona tu rival ante cada efecto y usa el que más le incomode.</li>
+        </ul>
+        <h3>2. Cambia la velocidad y la dirección</h3>
+        <ul>
+          <li>No saques siempre al mismo ritmo: combina saques rápidos con otros más lentos. Para ello es ideal utilizar gomas ofensivas como las <button class="article__product" data-add="goma-tenergy64">Tenergy</button>.</li>
+          <li>Alterna saques cortos cerca de la red con otros largos hacia el fondo de la mesa.</li>
+        </ul>
+        <img src="assets/img/blog-saque-2.jpg" alt="Jugador ejecutando un golpe junto a la mesa" loading="lazy">
+        <h3>3. Disimula tu movimiento</h3>
+        <ul>
+          <li>Usa el mismo movimiento para diferentes efectos y sorprende a tu oponente.</li>
+          <li>Trata de que tu rival no pueda leer fácilmente el efecto de tu saque.</li>
+        </ul>
+        <h3>4. Usa el saque a tu favor</h3>
+        <ul>
+          <li>Planea tu próximo golpe después del saque. Si haces un buen servicio, aprovecha la devolución para atacar.</li>
+          <li>Practica distintos saques hasta encontrar los que mejor se adapten a tu estilo de juego.</li>
+        </ul>
+        <p class="article__tags">práctica · saque · táctica</p>
+      </template>
+    </section>
+
     <!-- COMUNIDAD + JUEGO -->
     <section class="section section--dark" id="comunidad" data-score>
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">06 · Comunidad</p>
+          <p class="kicker">07 · Comunidad</p>
           <h2>Más que una tienda:<br><span class="muted">un punto de encuentro.</span></h2>
         </div>
         <div class="events">
@@ -339,7 +453,7 @@
     <section class="section section--light" id="canales" data-score>
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">07 · Dónde encontrarnos</p>
+          <p class="kicker">08 · Dónde encontrarnos</p>
           <h2>Del primer vídeo<br><span class="muted">al cliente de siempre.</span></h2>
         </div>
         <div class="funnel reveal">
@@ -365,7 +479,7 @@
     <section class="section section--dark" id="mapa" data-score>
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">08 · El hueco en el mapa</p>
+          <p class="kicker">09 · El hueco en el mapa</p>
           <h2>Andalucía occidental<br><span class="muted">no tenía su tienda.</span></h2>
           <p class="section__intro">Hay tiendas especializadas en España, pero están repartidas y lejos unas de otras. En Andalucía occidental no hemos encontrado ninguna tienda física comparable especializada al 100&nbsp;%. Set Point no competirá solo por precio: nuestra baza es la cercanía, la atención individual y la rapidez.</p>
         </div>
@@ -382,9 +496,10 @@
               <ellipse cx="190.2" cy="334.4" rx="70" ry="44"/>
               <text x="190.2" y="280.4" text-anchor="middle">Andalucía occidental</text>
             </g>
-            <g class="map__pin map__pin--home" transform="translate(182.9 334.9)">
+            <g class="map__pin map__pin--home" transform="translate(196.7 331.2)">
               <circle r="18" class="pulse"/><circle r="9"/>
               <text y="34" text-anchor="middle">SET POINT</text>
+              <text y="50" text-anchor="middle" class="map__sub">Carmona</text>
             </g>
             <g class="map__pin" transform="translate(511.0 143.5)" data-pin="0"><circle r="7"/><text x="-12" y="-6" text-anchor="end">Zona TT</text></g>
             <g class="map__pin" transform="translate(513.8 150.9)" data-pin="1"><circle r="7"/><text x="-12" y="18" text-anchor="end">Sports Madison</text></g>
@@ -406,7 +521,7 @@
     <section class="section section--red" id="embajadores" data-score>
       <div class="container ambassadors">
         <div class="reveal">
-          <p class="kicker kicker--light">09 · Patrocinios y embajadores</p>
+          <p class="kicker kicker--light">10 · Patrocinios y embajadores</p>
           <h2>Talento que inspira.</h2>
         </div>
         <div class="reveal">
@@ -419,7 +534,7 @@
     <section class="section section--light" id="proyecto" data-score>
       <div class="container">
         <div class="section__head reveal">
-          <p class="kicker">10 · El proyecto</p>
+          <p class="kicker">11 · El proyecto</p>
           <h2>Análisis rápido:<br><span class="muted">DAFO y ODS.</span></h2>
           <p class="section__intro">Toca cada cuadrante para darle la vuelta.</p>
         </div>
@@ -454,15 +569,34 @@
       </div>
     </section>
 
-    <!-- CTA FINAL -->
+    <!-- CONTACTO -->
     <section class="section section--dark final" id="contacto" data-score>
-      <div class="container final__inner reveal">
-        <p class="kicker">Set Point</p>
-        <h2 class="final__title">¿Jugamos?</h2>
-        <p class="section__intro">Cuéntanos tu nivel y cómo juegas. Te recomendamos el material adecuado sin coste.</p>
-        <div class="hero__cta">
-          <a href="#asesor" class="btn btn--primary">Empezar asesoramiento</a>
-          <a href="#juego" class="btn btn--ghost">Revancha en la mesa</a>
+      <div class="container">
+        <div class="final__inner reveal">
+          <p class="kicker">Set Point</p>
+          <h2 class="final__title">¿Jugamos?</h2>
+          <p class="section__intro">Ven a vernos, escríbenos o llámanos. Te recomendamos el material adecuado sin coste.</p>
+        </div>
+        <div class="contact">
+          <article class="contact__card reveal">
+            <h3>Visítanos</h3>
+            <dl class="contact__list">
+              <div><dt>Horario</dt><dd>Lunes – Viernes, 9:00 – 20:00</dd></div>
+              <div><dt>Dirección</dt><dd><a href="https://www.google.com/maps/search/?api=1&amp;query=Calle%20Charles%20Newton%205%2C%2041410%20Carmona%2C%20Sevilla" target="_blank" rel="noopener">Calle Charles Newton, 5<br>41410 Carmona, Sevilla</a></dd></div>
+              <div><dt>E-mail</dt><dd><a href="mailto:setpoint.inf@gmail.com">setpoint.inf@gmail.com</a></dd></div>
+              <div><dt>Teléfono</dt><dd><a href="tel:+34456789043">(+34) 456 789 043</a></dd></div>
+            </dl>
+          </article>
+          <article class="contact__card contact__card--news reveal">
+            <h3>¡Suscríbete a nuestra newsletter!</h3>
+            <p>Recibe descuentos y novedades de Set Point.</p>
+            <form class="news" id="newsForm" novalidate>
+              <label class="sr-only" for="newsEmail">Tu e-mail</label>
+              <input id="newsEmail" type="email" name="email" placeholder="tu@email.com" autocomplete="email" required>
+              <button class="btn btn--primary" type="submit">Enviar</button>
+            </form>
+            <p class="news__msg" id="newsMsg" role="status"></p>
+          </article>
         </div>
       </div>
     </section>
@@ -470,11 +604,37 @@
 
   <footer class="footer">
     <div class="container footer__inner">
-      <a href="#inicio" class="logo"><span class="logo__ball" aria-hidden="true"></span><span class="logo__text">SET<b>POINT</b></span></a>
+      <a href="#inicio" class="logo"><img class="logo__img" src="assets/img/logo.png" alt="" width="40" height="39"><span class="logo__text">SET<b>POINT</b></span></a>
       <p>Somos Set Point, somos tenis de mesa.</p>
-      <p class="footer__small">Proyecto Integrado · MAPU · Curso 26/27</p>
+      <p class="footer__small">Calle Charles Newton, 5 · Carmona (Sevilla) · Proyecto Integrado MAPU 26/27</p>
     </div>
   </footer>
+
+  <!-- CARRITO -->
+  <div class="cart__backdrop" id="cartBackdrop" hidden></div>
+  <aside class="cart" id="cart" aria-label="Carrito" aria-hidden="true" tabindex="-1">
+    <header class="cart__head">
+      <h2>Tu pedido</h2>
+      <button class="cart__close" id="cartClose" aria-label="Cerrar carrito">✕</button>
+    </header>
+    <div class="cart__ship">
+      <p id="cartShipText">Añade 50,00 € más y el envío es gratis.</p>
+      <div class="cart__shipbar"><span id="cartShipBar"></span></div>
+    </div>
+    <ul class="cart__items" id="cartItems"></ul>
+    <p class="cart__empty" id="cartEmpty">Tu carrito está vacío. ¡Elige tu material!</p>
+    <footer class="cart__foot">
+      <p class="cart__total"><span>Subtotal</span><b id="cartTotal">0,00 €</b></p>
+      <a class="btn btn--primary cart__checkout" id="cartCheckout" href="mailto:setpoint.inf@gmail.com">Enviar pedido por e-mail</a>
+      <p class="cart__note">Se abrirá tu correo con el pedido. Te confirmaremos disponibilidad, pago y envío en menos de 24&nbsp;h.</p>
+    </footer>
+  </aside>
+
+  <!-- ARTÍCULO -->
+  <dialog class="article" id="articleDialog" aria-label="Artículo del blog">
+    <button class="article__close" id="articleClose" aria-label="Cerrar artículo">✕</button>
+    <div class="article__body" id="articleBody"></div>
+  </dialog>
 
   <script src="js/main.js" defer></script>
 </body>

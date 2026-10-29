@@ -141,6 +141,225 @@
     });
   });
 
+  /* ---------- CATÁLOGO (contenido de la tienda Set Point) ---------- */
+  const IMG = 'assets/img/';
+  const PRODUCTS = [
+    { id: 'goma-tenergy64', cat: 'gomas', name: 'Goma Butterfly Tenergy 64', price: 54.99, img: 'goma-tenergy64.jpg', desc: 'La más rápida de la colección Tenergy. Diseñada para imprimir efecto.', specs: ['Rojo / Negro'] },
+    { id: 'goma-rozena', cat: 'gomas', name: 'Goma Butterfly Rozena', price: 39.99, img: 'goma-rozena.jpg', desc: 'La más adecuada para jugadores de nivel intermedio, con un control y velocidad perfectos.', specs: ['Rojo / Negro'] },
+    { id: 'goma-dignics09c', cat: 'gomas', name: 'Goma Butterfly Dignics 09c', price: 49.99, img: 'goma-dignics09c.jpg', desc: 'Diseñada para ofrecer una dureza y velocidad como nunca antes. Difícil de manejar pero con unas prestaciones extraordinarias.', specs: ['Rojo / Negro'], tag: 'Destacado' },
+    { id: 'madera-timoboll-zlc', cat: 'maderas', name: 'Madera Butterfly Timo Boll ZLC', price: 184.90, img: 'madera-timoboll-zlc.jpg', desc: 'Ideal para jugadores muy ofensivos.', specs: ['≈ 90 g', 'Ofensiva'] },
+    { id: 'madera-viscaria', cat: 'maderas', name: 'Madera Butterfly Viscaria', price: 164.90, img: 'madera-viscaria.jpg', desc: 'Combina velocidad y control, óptima para jugadores ofensivos.', specs: ['≈ 90 g', 'Ofensiva'] },
+    { id: 'madera-innershield', cat: 'maderas', name: 'Madera Butterfly Innershield Layer', price: 174.90, img: 'madera-innershield.jpg', desc: 'Diseñada para jugadores defensivos, con gran control.', specs: ['≈ 95 g', 'Defensiva'] },
+    { id: 'camiseta-hombre-seleccion', cat: 'textil', name: 'Camiseta Hombre Selección Española 25/26', price: 24.90, img: 'camiseta-hombre-seleccion.jpg', photo: true, desc: 'Luce los colores del equipo nacional.', specs: ['Rojo / Negro'], tag: 'Novedad' },
+    { id: 'camiseta-mujer-seleccion', cat: 'textil', name: 'Camiseta Mujer Selección Española 25/26', price: 24.90, img: 'camiseta-mujer-seleccion.jpg', photo: true, desc: 'Luce los colores del equipo nacional.', specs: ['Rojo / Negro'], tag: 'Novedad' },
+    { id: 'camiseta-circulo-mercantil', cat: 'textil', name: 'Camiseta Unisex Círculo Mercantil Sevilla 25/26', price: 29.90, img: 'camiseta-circulo-mercantil.jpg', photo: true, desc: 'La equipación del club sevillano.', specs: ['Negro / Azul'] },
+    { id: 'zapatilla-vilata', cat: 'calzado', name: 'Zapatillas Butterfly Vilata', price: 89.90, img: 'zapatilla-vilata.jpg', desc: 'Agarre y estabilidad para moverte rápido junto a la mesa.', specs: ['Blanco / Azul'] },
+    { id: 'zapatilla-lezoline-match2', cat: 'calzado', name: 'Zapatilla Butterfly Lezoline Match II', price: 99.90, img: 'zapatilla-lezoline-match2.jpg', desc: 'Para jugar a un ritmo diferente.', specs: ['Azul'] },
+    { id: 'zapatilla-lezoline-rifones', cat: 'calzado', name: 'Zapatilla Butterfly Lezoline Rifones', price: 114.90, img: 'zapatilla-lezoline-rifones.jpg', desc: 'Para jugar a un ritmo diferente.', specs: ['Negro'] }
+  ];
+  const byId = Object.fromEntries(PRODUCTS.map(p => [p.id, p]));
+  const eur = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+  const FREE_SHIP = 50;
+
+  const CATS = {
+    todo: { img: 'hero-home.jpg', t: 'Tu tienda especialista en tenis de mesa', p: 'Contamos con una amplia gama de maderas, gomas, camisetas y calzado. Nuestro objetivo es llevar tu juego al siguiente nivel.' },
+    gomas: { img: 'cat-gomas.jpg', t: 'Tenemos las mejores gomas para ti', p: 'Contamos con gomas diseñadas para todo tipo de jugadores. No lo dudes y haz tu pedido para que tus golpes dejen huella.' },
+    maderas: { img: 'cat-maderas.jpg', t: 'Hazte con la madera de tus sueños', p: 'Contamos con las mejores maderas del mercado. Rápidas y ligeras, perfectas para jugadores ofensivos, además de otras ideales para un estilo defensivo. ¡Elige tu madera y lánzate a la competición!' },
+    textil: { img: 'cat-textil.jpg', t: 'Hazte con las mejores camisetas', p: 'Contamos con las equipaciones de una gran variedad de clubes y marcas. ¡Elige la tuya y salta a la pista para escribir tu nombre en la historia de nuestro deporte!' },
+    calzado: { img: 'cat-calzado.jpg', t: 'Tenemos el mejor calzado para ti', p: 'Te ofrecemos el mejor calzado para todos aquellos jugadores que busquen jugar a un ritmo diferente, porque para nosotros sois diferentes al resto.' }
+  };
+
+  /* ---------- TIENDA ---------- */
+  const grid = $('#shopGrid');
+  const banner = $('#shopBanner');
+  const chips = $$('.chip');
+  let currentCat = 'todo';
+
+  const itemHTML = (p, i) => `
+    <article class="item${p.photo ? ' item--photo' : ''}" style="--i:${i * 0.05}s">
+      <div class="item__media">
+        <img src="${IMG + p.img}" alt="${p.name}" loading="lazy">
+        ${p.tag ? `<span class="item__tag${p.tag === 'Destacado' ? ' item__tag--hot' : ''}">${p.tag}</span>` : ''}
+      </div>
+      <div class="item__body">
+        <h3>${p.name}</h3>
+        <p class="item__desc">${p.desc}</p>
+        <div class="item__specs">${p.specs.map(s => `<span>${s}</span>`).join('')}</div>
+        <div class="item__foot">
+          <span class="item__price">${eur.format(p.price)}</span>
+          <button class="addbtn" data-add="${p.id}" aria-label="Añadir ${p.name} al carrito">Añadir</button>
+        </div>
+      </div>
+    </article>`;
+
+  const setCat = cat => {
+    currentCat = cat;
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === cat)));
+    const list = cat === 'todo' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
+    grid.innerHTML = list.map(itemHTML).join('');
+    const c = CATS[cat];
+    banner.classList.add('is-swapping');
+    setTimeout(() => {
+      $('#shopBannerImg').src = IMG + c.img;
+      $('#shopBannerTitle').textContent = c.t;
+      $('#shopBannerText').textContent = c.p;
+      banner.classList.remove('is-swapping');
+    }, reduceMotion ? 0 : 250);
+  };
+  chips.forEach(c => c.addEventListener('click', () => setCat(c.dataset.cat)));
+  $$('[data-goto-cat]').forEach(a => a.addEventListener('click', () => setCat(a.dataset.gotoCat)));
+  grid.innerHTML = PRODUCTS.map(itemHTML).join('');
+
+  /* ---------- CARRITO ---------- */
+  const cartEl = $('#cart');
+  const cartBtn = $('#cartBtn');
+  const backdrop = $('#cartBackdrop');
+  let cart = {};
+  try { cart = JSON.parse(localStorage.getItem('setpoint-cart')) || {}; } catch (e) { cart = {}; }
+  Object.keys(cart).forEach(id => { if (!byId[id]) delete cart[id]; });
+  const save = () => { try { localStorage.setItem('setpoint-cart', JSON.stringify(cart)); } catch (e) { /* sin almacenamiento */ } };
+
+  const renderCart = () => {
+    const ids = Object.keys(cart);
+    const count = ids.reduce((a, id) => a + cart[id], 0);
+    const total = ids.reduce((a, id) => a + cart[id] * byId[id].price, 0);
+    $('#cartCount').textContent = count;
+    cartBtn.classList.toggle('has-items', count > 0);
+    cartBtn.setAttribute('aria-label', `Abrir carrito (${count} ${count === 1 ? 'producto' : 'productos'})`);
+    $('#cartItems').innerHTML = ids.map(id => {
+      const p = byId[id];
+      return `<li>
+        <img src="${IMG + p.img}" alt="">
+        <div><b>${p.name}</b><small>${eur.format(p.price)}</small>
+          <div class="qty"><button data-qty="${id}" data-d="-1" aria-label="Quitar una unidad">−</button><span>${cart[id]}</span><button data-qty="${id}" data-d="1" aria-label="Añadir una unidad">+</button></div>
+        </div>
+        <span class="cart__line">${eur.format(cart[id] * p.price)}</span>
+      </li>`;
+    }).join('');
+    $('#cartEmpty').hidden = count > 0;
+    $('#cartTotal').textContent = eur.format(total);
+    const left = FREE_SHIP - total;
+    cartEl.classList.toggle('is-free', left <= 0);
+    $('#cartShipText').textContent = count === 0
+      ? `Envío gratis a domicilio en compras superiores a ${eur.format(FREE_SHIP)}.`
+      : left > 0 ? `Añade ${eur.format(left)} más y el envío es gratis.` : '¡Genial! Tu envío estándar es gratis.';
+    $('#cartShipBar').style.width = `${Math.min(100, (total / FREE_SHIP) * 100)}%`;
+    const checkout = $('#cartCheckout');
+    checkout.setAttribute('aria-disabled', String(count === 0));
+    const lines = ids.map(id => `- ${cart[id]} x ${byId[id].name} (${eur.format(byId[id].price)})`).join('\n');
+    const body = `Hola, Set Point:\n\nMe gustaría hacer este pedido:\n\n${lines}\n\nSubtotal: ${eur.format(total)}\n\nNombre:\nDirección de envío:\nTeléfono:\n\nGracias.`;
+    checkout.href = `mailto:setpoint.inf@gmail.com?subject=${encodeURIComponent('Pedido web Set Point')}&body=${encodeURIComponent(body)}`;
+  };
+
+  let lastFocus = null;
+  const openCart = () => {
+    lastFocus = document.activeElement;
+    cartEl.classList.add('is-open');
+    cartEl.setAttribute('aria-hidden', 'false');
+    cartBtn.setAttribute('aria-expanded', 'true');
+    backdrop.hidden = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => $('#cartClose').focus(), 50);
+  };
+  const closeCart = () => {
+    cartEl.classList.remove('is-open');
+    cartEl.setAttribute('aria-hidden', 'true');
+    cartBtn.setAttribute('aria-expanded', 'false');
+    backdrop.hidden = true;
+    document.body.style.overflow = '';
+    if (lastFocus) lastFocus.focus();
+  };
+  cartBtn.addEventListener('click', openCart);
+  $('#cartClose').addEventListener('click', closeCart);
+  backdrop.addEventListener('click', closeCart);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartEl.classList.contains('is-open')) closeCart(); });
+  $('#cartItems').addEventListener('click', e => {
+    const b = e.target.closest('[data-qty]');
+    if (!b) return;
+    const id = b.dataset.qty;
+    cart[id] = (cart[id] || 0) + +b.dataset.d;
+    if (cart[id] <= 0) delete cart[id];
+    save(); renderCart();
+  });
+
+  // La bola vuela en parábola hasta el carrito
+  const flyToCart = from => {
+    const target = cartBtn.getBoundingClientRect();
+    const r = from.getBoundingClientRect();
+    const x0 = r.left + r.width / 2, y0 = r.top + r.height / 2;
+    const x1 = target.left + target.width / 2, y1 = target.top + target.height / 2;
+    if (reduceMotion || !Element.prototype.animate) return Promise.resolve();
+    const ball = document.createElement('div');
+    ball.className = 'flyball';
+    document.body.appendChild(ball);
+    const peak = Math.min(y0, y1) - 140;
+    const frames = [];
+    for (let i = 0; i <= 20; i++) {
+      const t = i / 20;
+      const x = x0 + (x1 - x0) * t;
+      const y = (1 - t) * (1 - t) * y0 + 2 * (1 - t) * t * peak + t * t * y1;
+      frames.push({ transform: `translate(${x}px, ${y}px) scale(${1 - t * 0.4})`, offset: t });
+    }
+    ball.style.left = '0'; ball.style.top = '0';
+    return ball.animate(frames, { duration: 750, easing: 'cubic-bezier(.3,.1,.5,1)' }).finished.then(() => ball.remove());
+  };
+
+  const addToCart = (id, btn) => {
+    if (!byId[id]) return;
+    cart[id] = (cart[id] || 0) + 1;
+    save();
+    flyToCart(btn).then(() => {
+      renderCart();
+      cartBtn.classList.remove('bump'); void cartBtn.offsetWidth; cartBtn.classList.add('bump');
+    });
+    if (btn.classList.contains('addbtn')) {
+      btn.classList.add('is-added');
+      btn.textContent = '✓ Añadido';
+      setTimeout(() => { btn.classList.remove('is-added'); btn.textContent = 'Añadir'; }, 1400);
+    }
+  };
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-add]');
+    if (b) addToCart(b.dataset.add, b);
+  });
+  renderCart();
+
+  /* ---------- BLOG ---------- */
+  const dlg = $('#articleDialog');
+  const dlgBody = $('#articleBody');
+  $$('[data-post]').forEach(btn => btn.addEventListener('click', () => {
+    dlgBody.replaceChildren($('#' + btn.dataset.post).content.cloneNode(true));
+    if (typeof dlg.showModal === 'function') dlg.showModal(); else dlg.setAttribute('open', '');
+    dlg.scrollTop = 0;
+  }));
+  $('#articleClose').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+
+  /* ---------- NEWSLETTER ---------- */
+  $('#newsForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const input = $('#newsEmail');
+    const msg = $('#newsMsg');
+    if (!input.checkValidity() || !input.value) { msg.textContent = 'Escribe un e-mail válido.'; input.focus(); return; }
+    const body = `Hola, Set Point:\n\nQuiero suscribirme a la newsletter con este e-mail: ${input.value}\n\nGracias.`;
+    window.location.href = `mailto:setpoint.inf@gmail.com?subject=${encodeURIComponent('Alta en la newsletter')}&body=${encodeURIComponent(body)}`;
+    msg.textContent = 'Se abrirá tu correo para confirmar el alta. ¡Gracias!';
+  });
+
+  /* ---------- PARALLAX PROMO ---------- */
+  const promoImg = $('.promo__img');
+  if (promoImg && !reduceMotion) {
+    const promo = promoImg.parentElement;
+    const onPar = () => {
+      const r = promo.getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight) return;
+      const p = (r.top + r.height) / (innerHeight + r.height);
+      promoImg.style.transform = `translateY(${(p - 1) * 16}%)`;
+    };
+    window.addEventListener('scroll', onPar, { passive: true });
+    onPar();
+  }
+
   /* ---------- ASESOR DE MATERIAL ---------- */
   const form = $('#advisorForm');
   const steps = $$('.advisor__step', form);
@@ -160,25 +379,39 @@
     result.hidden = true;
   };
 
+  // Orientación basada en la guía del blog «Cómo elegir la pala…»
   const RECO = {
     nivel: {
-      inicio:     { pala: 'Pala montada de iniciación', palaTxt: 'Lista para jugar, ligera y con mucho control. Ideal para aprender bien la técnica.', vel: 30 },
-      aficionado: { pala: 'Pala montada de gama media o primera pala por piezas', palaTxt: 'Un salto de calidad sin pasarte de nivel. Es el error más habitual.', vel: 50 },
-      federado:   { pala: 'Madera y gomas por separado', palaTxt: 'Combinación a medida según tu estilo, con primeras marcas y novedades.', vel: 75 },
-      club:       { pala: 'Packs para equipos y escuelas', palaTxt: 'Pedidos agrupados, relación estable y descuentos por volumen.', vel: 55 }
+      inicio:     { pala: 'Control y comodidad', palaTxt: 'Gomas con esponja fina (1,5 mm o menos) y madera equilibrada entre velocidad y control. Mango anatómico o cóncavo.', vel: 30 },
+      aficionado: { pala: 'Más efecto y potencia', palaTxt: 'Gomas de esponja media (1,7–2,0 mm) para equilibrar efecto y velocidad, sin pasarte de nivel.', vel: 50 },
+      federado:   { pala: 'Velocidad y precisión máxima', palaTxt: 'Gomas de esponja gruesa (2,1–2,2 mm) y madera con carbono o ZLC para una respuesta rápida.', vel: 75 },
+      club:       { pala: 'Pedidos para equipos y escuelas', palaTxt: 'Pedidos agrupados, relación estable y descuentos según el volumen de compra.', vel: 55 }
     },
     estilo: {
-      defensivo: { madera: 'Madera defensiva (DEF)', maderaTxt: 'Lenta y con mucha sensibilidad para cortar y controlar lejos de la mesa.', v: -20 },
-      allround:  { madera: 'Madera todoterreno (ALL)', maderaTxt: 'El equilibrio perfecto entre control y velocidad.', v: 0 },
-      ofensivo:  { madera: 'Madera ofensiva (OFF−/OFF)', maderaTxt: 'Más rígida y rápida para tomar la iniciativa con top-spin.', v: 20 },
-      nose:      { madera: 'Madera todoterreno (ALL)', maderaTxt: 'La mejor base para descubrir tu estilo. Después la ajustamos juntos.', v: 0 }
+      defensivo: { madera: 'Madera defensiva', maderaTxt: 'Con gran control y sensibilidad para cortar y devolver lejos de la mesa.', v: -20 },
+      allround:  { madera: 'Madera equilibrada', maderaTxt: 'El equilibrio entre control y velocidad para jugar un poco de todo.', v: 0 },
+      ofensivo:  { madera: 'Madera ofensiva', maderaTxt: 'Más rígida, con carbono, para tomar la iniciativa con top-spin.', v: 20 },
+      nose:      { madera: 'Madera equilibrada', maderaTxt: 'La mejor base para descubrir tu estilo. Después la ajustamos juntos.', v: 0 }
     },
     objetivo: {
-      control:   { goma: 'Gomas de control', gomaTxt: 'Esponja blanda y superficie predecible para fallar menos.', e: 45 },
-      efecto:    { goma: 'Gomas con alto agarre', gomaTxt: 'Superficie con mucho agarre para generar más rotación.', e: 85 },
-      velocidad: { goma: 'Gomas de esponja dura', gomaTxt: 'Más salida de bola y potencia en cada golpe.', e: 60 },
+      control:   { goma: 'Gomas de control', gomaTxt: 'Esponja más fina y superficie predecible para fallar menos.', e: 45 },
+      efecto:    { goma: 'Gomas más blandas', gomaTxt: 'Si priorizas el efecto, mejor gomas blandas que agarren la bola.', e: 85 },
+      velocidad: { goma: 'Gomas más duras', gomaTxt: 'Si priorizas la velocidad, mejor gomas duras con más salida de bola.', e: 60 },
       todo:      { goma: 'Gomas equilibradas', gomaTxt: 'Un poco de todo: control, efecto y velocidad sin extremos.', e: 60 }
     }
+  };
+
+  // Productos del catálogo que encajan con las respuestas
+  const suggestFor = d => {
+    const base = d.nivel === 'inicio' || d.nivel === 'aficionado';
+    let madera = 'madera-viscaria';
+    if (d.estilo === 'defensivo' || (base && d.estilo !== 'ofensivo')) madera = 'madera-innershield';
+    else if (d.estilo === 'ofensivo' && d.nivel === 'federado') madera = 'madera-timoboll-zlc';
+    let goma = 'goma-rozena';
+    if (!base && d.nivel !== 'club') {
+      goma = { control: 'goma-rozena', efecto: 'goma-tenergy64', velocidad: 'goma-dignics09c', todo: 'goma-tenergy64' }[d.objetivo];
+    }
+    return [madera, goma].map(id => byId[id]);
   };
 
   const renderResult = () => {
@@ -187,18 +420,21 @@
     const vel = Math.max(10, Math.min(95, n.vel + s.v + (d.objetivo === 'velocidad' ? 12 : 0)));
     const tip = d.nivel === 'club'
       ? 'Habla con nosotros para preparar el pedido del club: condiciones especiales y descuentos por volumen.'
-      : 'Ven a probarlo en la mesa de competición de la tienda o escríbenos por WhatsApp: te asesoramos gratis.';
+      : 'Ven a probarlo en la mesa de competición de la tienda o escríbenos: te asesoramos gratis.';
     result.innerHTML = `
       <div class="result__head">
         <span class="result__badge" aria-hidden="true"></span>
         <div><h3>Tu punto de partida</h3><p>Una primera orientación según tus respuestas.</p></div>
       </div>
       <div class="result__grid">
-        <div class="result__item"><small>Formato</small><b>${n.pala}</b><p>${n.palaTxt}</p></div>
+        <div class="result__item"><small>Tu nivel</small><b>${n.pala}</b><p>${n.palaTxt}</p></div>
         <div class="result__item"><small>Madera</small><b>${s.madera}</b><p>${s.maderaTxt}</p>
           <div class="meter" title="Velocidad"><span style="--to:${vel}%"></span></div></div>
         <div class="result__item"><small>Gomas</small><b>${o.goma}</b><p>${o.gomaTxt}</p>
           <div class="meter" title="Efecto"><span style="--to:${o.e}%"></span></div></div>
+      </div>
+      <div class="result__products">
+        ${suggestFor(d).map(p => `<div class="suggest"><img src="${IMG + p.img}" alt=""><div><b>${p.name}</b><small>${eur.format(p.price)}</small></div><button class="addbtn" data-add="${p.id}" aria-label="Añadir ${p.name} al carrito">Añadir</button></div>`).join('')}
       </div>
       <p class="result__tip">${tip}</p>`;
     result.hidden = false;
