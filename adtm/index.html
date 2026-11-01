@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ADTM Don Benito · Generador de publicaciones</title>
+  <meta name="description" content="Genera los carteles de partido y de resultado de la ADTM Don Benito para redes sociales.">
+  <meta name="theme-color" content="#1e489e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="ADTM Posts">
+  <link rel="apple-touch-icon" href="assets/donbenito.png">
+  <link rel="icon" href="assets/donbenito.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="top">
+    <img src="assets/donbenito.png" alt="" class="top__logo">
+    <div>
+      <h1>Generador de publicaciones</h1>
+      <p>ADTM Don Benito · Tenis de mesa</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="preview" aria-label="Vista previa">
+      <div class="preview__frame">
+        <canvas id="canvas" width="1080" height="1350"></canvas>
+      </div>
+      <p class="hint" id="dragHint" hidden>Arrastra la foto sobre la vista previa para encuadrarla.</p>
+      <div class="actions">
+        <button class="btn btn--primary" id="downloadBtn" type="button">Descargar PNG</button>
+        <button class="btn" id="shareBtn" type="button" hidden>Compartir / Guardar en Fotos</button>
+      </div>
+    </section>
+
+    <form class="panel" id="form" autocomplete="off" onsubmit="return false">
+      <fieldset class="card">
+        <legend>1 · Publicación</legend>
+        <div class="seg seg--divs" role="radiogroup" aria-label="División">
+          <label><input type="radio" name="div" value="dh" checked><span><i style="--c:#ffffff;--b:#1e489e"></i>División de Honor</span></label>
+          <label><input type="radio" name="div" value="n1"><span><i style="--c:#1e489e"></i>1ª Nacional</span></label>
+          <label><input type="radio" name="div" value="d3"><span><i style="--c:#4395df"></i>3ª División</span></label>
+          <label><input type="radio" name="div" value="reg"><span><i style="--c:#4395df"></i>Regional</span></label>
+        </div>
+        <div class="seg" role="radiogroup" aria-label="Tipo">
+          <label><input type="radio" name="type" value="cartel" checked><span>Cartel del partido</span></label>
+          <label><input type="radio" name="type" value="resultado"><span>Resultado</span></label>
+        </div>
+        <label class="field field--short">Jornada
+          <input type="number" name="jornada" min="1" max="99" value="1" inputmode="numeric">
+        </label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>2 · Equipos</legend>
+        <label class="field">Nombre del equipo de Don Benito
+          <textarea name="dbName" rows="2"></textarea>
+        </label>
+        <div class="seg" role="radiogroup" aria-label="Don Benito juega">
+          <label><input type="radio" name="side" value="home" checked><span>En casa (izquierda)</span></label>
+          <label><input type="radio" name="side" value="away"><span>Fuera (derecha)</span></label>
+        </div>
+
+        <div class="rivals">
+          <label class="field">Rival guardado
+            <select id="rivalSelect"><option value="">— Elegir —</option></select>
+          </label>
+          <button type="button" class="btn btn--small" id="deleteRival" title="Borrar rival guardado">Borrar</button>
+        </div>
+
+        <label class="field">Nombre del rival
+          <textarea name="rivalName" rows="2" placeholder="Ej.: C.T.M. JEREZ"></textarea>
+        </label>
+
+        <div class="field">Escudo del rival
+          <label class="drop" id="shieldDrop">
+            <input type="file" id="shieldFile" accept="image/*">
+            <span>Toca para subir el escudo (JPG o PNG). El fondo se quita solo.</span>
+          </label>
+        </div>
+        <div class="shield" id="shieldBox" hidden>
+          <div class="checker"><img id="shieldPreview" alt="Escudo sin fondo"></div>
+          <div class="shield__controls">
+            <label class="field">Sensibilidad del borrado <output id="tolOut">60</output>
+              <input type="range" name="tolerance" min="5" max="160" value="60">
+            </label>
+            <label class="check"><input type="checkbox" name="globalKey"> Quitar también ese color dentro del escudo</label>
+            <label class="check"><input type="checkbox" name="noRemove"> No quitar el fondo (ya es PNG)</label>
+            <label class="field">Tamaño del escudo
+              <input type="range" name="shieldScale" min="0.6" max="1.4" step="0.02" value="1">
+            </label>
+            <div class="row">
+              <a class="btn btn--small" id="shieldDownload" download="escudo.png">Descargar PNG</a>
+              <button type="button" class="btn btn--small" id="saveRival">Guardar rival</button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="card only-cartel">
+        <legend>3 · Datos del partido</legend>
+        <div class="grid2">
+          <label class="field">Fecha <input type="date" name="date"></label>
+          <label class="field">Hora <input type="time" name="time" value="11:00"></label>
+        </div>
+        <label class="field">Lugar (opcional)
+          <textarea name="place" rows="2" placeholder="Ej.: Pabellón Jesús Gil Manzano (Don Benito)"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="card only-resultado" hidden>
+        <legend>3 · Resultado</legend>
+        <div class="grid2">
+          <label class="field">Puntos Don Benito <input type="number" name="scoreDB" min="0" max="99" value="4" inputmode="numeric"></label>
+          <label class="field">Puntos rival <input type="number" name="scoreRival" min="0" max="99" value="2" inputmode="numeric"></label>
+        </div>
+        <div class="field">Foto de los equipos
+          <label class="drop">
+            <input type="file" id="photoFile" accept="image/*">
+            <span>Toca para subir la foto del partido</span>
+          </label>
+        </div>
+        <label class="field">Zoom de la foto
+          <input type="range" name="photoZoom" min="1" max="3" step="0.01" value="1">
+        </label>
+        <div class="grid2">
+          <label class="field">Mover horizontal <input type="range" name="photoX" min="0" max="1" step="0.005" value="0.5"></label>
+          <label class="field">Mover vertical <input type="range" name="photoY" min="0" max="1" step="0.005" value="0.5"></label>
+        </div>
+      </fieldset>
+    </form>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
