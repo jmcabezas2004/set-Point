@@ -155,3 +155,12 @@ textarea { resize: vertical; }
   display: flex; justify-content: space-between; gap: 8px;
 }
 .history small { color: var(--muted); white-space: nowrap; }
+
+.seg--modes label { flex: 1 1 150px; }
+.seg--modes span { display: grid; gap: 2px; text-align: left; padding: 10px 12px; }
+.seg--modes b { font-size: .88rem; }
+.seg--modes small { font-weight: 500; font-size: .74rem; opacity: .75; }
+.apibox { display: grid; gap: 10px; }
+code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .9em; }
+.warn { margin: 0; font-size: .82rem; color: var(--muted); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; white-space: pre-wrap; }
+a.btn { text-decoration: none; display: inline-flex; align-items: center; }

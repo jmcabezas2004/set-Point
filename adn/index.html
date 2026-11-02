@@ -38,6 +38,7 @@
             <small>También puedes pegarlas con Ctrl/Cmd + V</small>
           </label>
           <div class="thumbs" id="thumbs"></div>
+          <label class="check"><input type="checkbox" id="ocr" checked> Leer el texto de las capturas (bio, captions, teléfono…)</label>
         </div>
         <label class="field">Notas o datos que ya conozcas (opcional)
           <textarea id="notes" rows="3" placeholder="Ej.: llevan 12 años, el agente principal es Ana López, trabajan en Sevilla capital…"></textarea>
@@ -55,15 +56,25 @@
       </fieldset>
 
       <fieldset class="card">
-        <legend>3 · Clave de la API de Claude</legend>
-        <label class="field">API key
-          <input type="password" id="key" placeholder="sk-ant-…" spellcheck="false">
-        </label>
-        <label class="check"><input type="checkbox" id="remember" checked> Recordar en este navegador</label>
-        <p class="hint">La clave solo se guarda en tu navegador y se envía directamente a Anthropic. Consíguela en <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">platform.claude.com</a>.</p>
+        <legend>3 · Cómo analizar</legend>
+        <div class="seg seg--modes" role="radiogroup" aria-label="Modo">
+          <label><input type="radio" name="mode" value="local" checked><span><b>Local</b><small>Gratis · en tu navegador</small></span></label>
+          <label><input type="radio" name="mode" value="prompt"><span><b>Prompt para Claude.ai</b><small>Gratis · con tu chat</small></span></label>
+          <label><input type="radio" name="mode" value="api"><span><b>API de Claude</b><small>De pago · automático</small></span></label>
+        </div>
+        <p class="hint" data-mode="local">Lee la web, saca colores HEX, tipografías, logo, contacto y servicios, y lee el texto de las capturas. Los textos (propuesta, tono…) son un borrador a partir de lo que dice la marca. Lo que no encuentre queda como <code>[completar]</code>.</p>
+        <p class="hint" data-mode="prompt" hidden>Hace el análisis local y te prepara un prompt con todo. Pégalo en <a href="https://claude.ai/new" target="_blank" rel="noopener">claude.ai</a>, adjunta las capturas y Claude te devuelve la ficha redactada. Luego puedes pegarla aquí con «Editar».</p>
+        <div data-mode="api" hidden class="apibox">
+          <label class="field">API key
+            <input type="password" id="key" placeholder="sk-ant-…" spellcheck="false">
+          </label>
+          <label class="check"><input type="checkbox" id="remember" checked> Recordar en este navegador</label>
+          <p class="hint">Consume saldo de tu cuenta en <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">platform.claude.com</a>. La clave solo se guarda en tu navegador.</p>
+        </div>
       </fieldset>
 
-      <button class="btn btn--primary btn--big" id="go" type="submit">Extraer ADN</button>
+      <button class="btn btn--primary btn--big" id="go" type="submit">Extraer ADN gratis</button>
+      <p class="warn" id="warn" hidden></p>
       <p class="error" id="error" hidden></p>
     </form>
 
@@ -74,7 +85,8 @@
           <div class="actions">
             <button class="btn" id="copy" type="button" disabled>Copiar</button>
             <button class="btn" id="download" type="button" disabled>Descargar .txt</button>
-            <button class="btn" id="edit" type="button" disabled>Editar</button>
+            <button class="btn" id="edit" type="button">Editar</button>
+            <a class="btn" id="openClaude" href="https://claude.ai/new" target="_blank" rel="noopener" hidden>Abrir Claude.ai</a>
           </div>
         </div>
         <div class="status" id="status" hidden>
