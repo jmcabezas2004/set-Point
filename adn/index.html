@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Extractor de ADN de marca</title>
+  <meta name="description" content="Extrae el ADN de una marca a partir de su web o de capturas de su feed de Instagram.">
+  <meta name="theme-color" content="#14171D">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="top__mark" aria-hidden="true">ADN</div>
+    <div>
+      <h1>Extractor de ADN de marca</h1>
+      <p>Pega una web o sube capturas del feed de Instagram y obtén la ficha de marca lista para usar con IA.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <form class="panel" id="form" autocomplete="off" novalidate>
+      <fieldset class="card">
+        <legend>1 · Fuentes</legend>
+        <label class="field">Enlace de la web
+          <input type="url" id="url" placeholder="https://www.tumarca.es" inputmode="url">
+        </label>
+        <label class="field">Instagram (opcional)
+          <input type="text" id="ig" placeholder="@tumarca">
+        </label>
+        <div class="field">
+          <span>Capturas de pantalla (feed de Instagram, web, folletos…)</span>
+          <label class="drop" id="drop">
+            <input type="file" id="files" accept="image/*" multiple>
+            <strong>Toca para añadir</strong> o arrastra aquí las imágenes
+            <small>También puedes pegarlas con Ctrl/Cmd + V</small>
+          </label>
+          <div class="thumbs" id="thumbs"></div>
+          <label class="check"><input type="checkbox" id="ocr" checked> Leer el texto de las capturas (bio, captions, teléfono…)</label>
+        </div>
+        <label class="field">Notas o datos que ya conozcas (opcional)
+          <textarea id="notes" rows="3" placeholder="Ej.: llevan 12 años, el agente principal es Ana López, trabajan en Sevilla capital…"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>2 · Plantilla</legend>
+        <div class="seg" role="radiogroup" aria-label="Plantilla">
+          <label><input type="radio" name="tpl" value="auto" checked><span>Detectar sector</span></label>
+          <label><input type="radio" name="tpl" value="inmobiliaria"><span>Inmobiliaria</span></label>
+          <label><input type="radio" name="tpl" value="generica"><span>Cualquier marca</span></label>
+        </div>
+        <p class="hint">«Inmobiliaria» usa exactamente tu formato. «Detectar sector» lo adapta (p. ej. «ADN RESTAURANTE», «SERVICIOS / CARTA»).</p>
+      </fieldset>
+
+      <fieldset class="card">
+        <legend>3 · Cómo analizar</legend>
+        <div class="seg seg--modes" role="radiogroup" aria-label="Modo">
+          <label><input type="radio" name="mode" value="local" checked><span><b>Local</b><small>Gratis · en tu navegador</small></span></label>
+          <label><input type="radio" name="mode" value="prompt"><span><b>Prompt para Claude.ai</b><small>Gratis · con tu chat</small></span></label>
+          <label><input type="radio" name="mode" value="api"><span><b>API de Claude</b><small>De pago · automático</small></span></label>
+        </div>
+        <p class="hint" data-mode="local">Lee la web, saca colores HEX, tipografías, logo, contacto y servicios, y lee el texto de las capturas. Los textos (propuesta, tono…) son un borrador a partir de lo que dice la marca. Lo que no encuentre queda como <code>[completar]</code>.</p>
+        <p class="hint" data-mode="prompt" hidden>Hace el análisis local y te prepara un prompt con todo. Pégalo en <a href="https://claude.ai/new" target="_blank" rel="noopener">claude.ai</a>, adjunta las capturas y Claude te devuelve la ficha redactada. Luego puedes pegarla aquí con «Editar».</p>
+        <div data-mode="api" hidden class="apibox">
+          <label class="field">API key
+            <input type="password" id="key" placeholder="sk-ant-…" spellcheck="false">
+          </label>
+          <label class="check"><input type="checkbox" id="remember" checked> Recordar en este navegador</label>
+          <p class="hint">Consume saldo de tu cuenta en <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">platform.claude.com</a>. La clave solo se guarda en tu navegador.</p>
+        </div>
+      </fieldset>
+
+      <button class="btn btn--primary btn--big" id="go" type="submit">Extraer ADN gratis</button>
+      <p class="warn" id="warn" hidden></p>
+      <p class="error" id="error" hidden></p>
+    </form>
+
+    <section class="result" aria-label="Resultado">
+      <div class="card result__card">
+        <div class="result__head">
+          <h2 id="resultTitle">ADN de la marca</h2>
+          <div class="actions">
+            <button class="btn" id="copy" type="button" disabled>Copiar</button>
+            <button class="btn" id="download" type="button" disabled>Descargar .txt</button>
+            <button class="btn" id="edit" type="button">Editar</button>
+            <a class="btn" id="openClaude" href="https://claude.ai/new" target="_blank" rel="noopener" hidden>Abrir Claude.ai</a>
+          </div>
+        </div>
+        <div class="status" id="status" hidden>
+          <span class="spinner" aria-hidden="true"></span><span id="statusText">Analizando…</span>
+        </div>
+        <div class="swatches" id="swatches"></div>
+        <pre class="output" id="output"><span class="placeholder">Aquí aparecerá el ADN de la marca con el formato:
+
+=== ADN INMOBILIARIA ===
+IDENTIDAD
+IDENTIDAD VISUAL
+PROPUESTA DE VALOR
+TONO DE COMUNICACIÓN
+ARGUMENTOS CLAVE
+SERVICIOS
+INSTRUCCIONES DE DISEÑO PARA IA
+FIRMA CORPORATIVA
+=== FIN ADN ===</span></pre>
+        <textarea class="output output--edit" id="editor" hidden></textarea>
+      </div>
+
+      <div class="card" id="historyCard" hidden>
+        <div class="result__head">
+          <h2>Historial</h2>
+          <button class="btn btn--ghost" id="clearHistory" type="button">Borrar</button>
+        </div>
+        <ul class="history" id="history"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
